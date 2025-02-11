@@ -1,2 +1,3 @@
 .scons
 *.pyc
+.DS_Store
