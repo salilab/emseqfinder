@@ -1,17 +1,17 @@
 # emseqfinder
 
-##How to run the program to get sequence assignments
-##1. We need a database folder. example "test"
-##2. create and folder with anything like "emdbid"
-##3. Make two folders '0system' and '1structure_elements' inside "emdbid" folder
-##4. Put sequence file (.fasta), EM map (.map) and PDB file (.pdb) associated to that EM map inside emdbid/0system
-##5. Get the PDB file and run stride to get the secodnary structure annotations.
-##6. Then run ./fragdb_generation/get_fraglib_from_native.py script to generate the fragements. Copy all the fragments to emdbid/1structure_elements
+## How to run the program to get sequence assignments
+## 1. We need a database folder. example "test"
+## 2. create and folder with anything like "emdbid"
+## 3. Make two folders '0system' and '1structure_elements' inside "emdbid" folder
+## 4. Put sequence file (.fasta), EM map (.map) and PDB file (.pdb) associated to that EM map inside emdbid/0system
+## 5. Get the PDB file and run stride to get the secodnary structure annotations.
+## 6. Then run ./fragdb_generation/get_fraglib_from_native.py script to generate the fragements. Copy all the fragments to emdbid/1structure_elements
 
-##7. Edit the conifg.py file inside ./ML_database_generation_final with database_home as "test" and run ./ML_database_generation_final/parts_ML_database_generation.py script on testrun.txt
-##8. Please check configuration of a testrun.txt file in the ./ML_database_generation_final folder.
-##9. once the ML database is generated from the EMDB voxel and some other informations, go head to run the ML prediction script in this folder.
-##10. CNN prediction
+## 7. Edit the conifg.py file inside ./ML_database_generation_final with database_home as "test" and run ./ML_database_generation_final/parts_ML_database_generation.py script on testrun.txt
+## 8. Please check configuration of a testrun.txt file in the ./ML_database_generation_final folder.
+## 9. once the ML database is generated from the EMDB voxel and some other informations, go head to run the ML prediction script in this folder.
+## 10. CNN prediction
 	Filenames: 1. CNN run script: final_ML_predict.py
 		2. pickling the input before running CNN: convert_MLDB_topkl.py
 ##11. Now you can use evalute_output_database.py and calculate_seq_match.py for analysis.
