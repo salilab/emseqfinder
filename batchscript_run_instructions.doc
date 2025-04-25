@@ -1,0 +1,23 @@
+Step 1: Set Base Directory in Config
+Navigate to the ML_database_generation_final folder and open the config file. Update the path to point to your base directory where the input and intermediate files will be stored.
+
+Example:
+base_path=/your/full/path/to/base/folder
+Step 2: Add Input Files
+Inside the base folder, you should have the following subfolders:
+- pdb_files/ → contains .pdb structure files
+- cryoem_maps/ → contains .map density files
+- fasta_files/ → contains .fasta sequence files
+
+Place your input data into the respective folders with same name.
+Step 3: Run the Pipeline
+Run the EMSequenceFinder shell script to start processing all inputs:
+
+bash emseqfinder.sh
+
+Make sure the script has executable permission:
+chmod +x emseqfinder.sh
+Step 4: Output Files
+Upon successful execution, the following output files will be generated:
+- *_ML_side_ML_prob.dat → contains fragment-wise sequence scores
+- batch_matching_results.txt → contains overall sequence matching accuracy per structure.
