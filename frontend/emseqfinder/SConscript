@@ -1,5 +1,0 @@
-Import('env')
-
-SConscript('templates/SConscript')
-
-env.InstallPythonFrontend(['__init__.py'])
