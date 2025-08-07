@@ -20,6 +20,8 @@ def compute_cdf(dmap, exclude_zero=True):
         val = dmap.get_value(i)
         if not exclude_zero or val != 0:
             vals.append(val)
+    if len(vals) ==0:
+    	raise ValueError("The input density map contains no valid voxel values.")
     f = ECDF(vals) # Return the Empirical CDF of an array as a step function
     return f    
 

@@ -120,13 +120,17 @@ def get_correct_probs(df, probs):
         prob_list.append(row[resnames[i]])
         i+=1
     return pd.Series(prob_list)
-        
+import os
+
+# Use the same prefix as the input .pkl
+base_name = os.path.splitext(sys.argv[1])[0]  # e.g., "3j5r_ML_side"
+output_file = f"{base_name}_ML_prob.dat"        
 df_oc["c_prob"] = get_correct_probs(indat.data_df, df_pred)
 #df_oc["vavg"] = np.average(Ximageall, axis=1)
 #df_oc["vstd"] = np.std(Ximageall, axis=1)
 df_oc.reset_index(drop=True, inplace=True)
 df_pred.reset_index(drop=True, inplace=True)
 df_out = pd.concat([df_oc, df_pred], axis=1)
-df_out.to_csv("test_ML_prob.dat", sep=" ", index=False)
+df_out.to_csv(output_file, sep=" ", index=False)
 
 

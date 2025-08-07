@@ -14,7 +14,7 @@ if [[ ! -f "$final_output_file" ]]; then
 fi
 
 # Loop through all PDB files
-for pdbfile in perturbed_only/*.pdb; do
+for pdbfile in pdb_files/*.pdb; do
 
     filename_with_ext=$(basename "$pdbfile")
     base="${filename_with_ext%.*}"

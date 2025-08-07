@@ -82,6 +82,10 @@ def mutate_residue(residue_particle, new_aa):
     topology = ff.create_topology(rph)
     topology.add_missing_atoms(rph)
     topology.add_coordinates(rph)
+    topology = ff.create_topology(rph)
+    topology.add_atom_types(rph)
+    topology.add_missing_atoms(rph)
+
     bonds = topology.add_bonds(rph)
     angles = ff.create_angles(bonds)
     dihedrals = ff.create_dihedrals(bonds)

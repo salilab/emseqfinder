@@ -54,9 +54,10 @@ print("Total number of systems:", len(emdbs))
 for emdb in emdbs:
     sedfs = get_emdb_SEs_from_db(dfs, emdb)
 #    print(emdb)
-    database_home_ = "path_to database"
+    database_home_ = "."
+    fasta_file = f"{emdb}.fasta"
 #    seqs = read_sequences(os.path.join(database_home, emdb, "0system", "native.fasta"))
-    seqs = read_sequences(os.path.join(database_home_, emdb, "0system", "test.fasta"))
+    seqs = read_sequences(os.path.join(database_home_, emdb, "0system", fasta_file))
 #    print(seqs)
 
     if len(sedfs) == 0:

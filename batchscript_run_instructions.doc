@@ -9,15 +9,17 @@ Inside the base folder, you should have the following subfolders:
 - cryoem_maps/ → contains .map density files
 - fasta_files/ → contains .fasta sequence files
 
+Step3: Inside the reference folder please unzip the ref.mrc.zip and place ref.mrc file inside reference folder directly.
+
 Place your input data into the respective folders with same name.
-Step 3: Run the Pipeline
+Step 4: Run the Pipeline
 Run the EMSequenceFinder shell script to start processing all inputs:
 
 bash emseqfinder.sh
 
 Make sure the script has executable permission:
 chmod +x emseqfinder.sh
-Step 4: Output Files
+Step 5: Output Files
 Upon successful execution, the following output files will be generated:
 - *_ML_side_ML_prob.dat → contains fragment-wise sequence scores
 - batch_matching_results.txt → contains overall sequence matching accuracy per structure.
