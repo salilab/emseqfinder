@@ -1,0 +1,28 @@
+name: build
+
+on:
+  push:
+  pull_request:
+  schedule:
+  - cron: "31 2 * * 4"  # Run at a random time weekly
+
+jobs:
+  build:
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        python-version: ["3.13"]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: true
+    - name: Setup dependencies
+      run: |
+        pip3 install coverage pytest-flake8
+    - name: Test
+      run: |
+        flake8 .
