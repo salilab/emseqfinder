@@ -4,7 +4,7 @@ import IMP.core
 import IMP.pmi
 import IMP.pmi.topology
 import numpy
-import config
+from . import config
 
 alpha = IMP.pmi.alphabets.amino_acid
 ff = IMP.atom.CHARMMParameters(IMP.atom.get_data_path("top_heav.lib"),

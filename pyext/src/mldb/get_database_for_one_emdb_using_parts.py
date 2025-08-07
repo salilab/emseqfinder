@@ -4,9 +4,9 @@ import os
 import IMP
 import IMP.em
 import IMP.core
-import tools
-import config
-import imp_tools
+from . import tools
+from . import config
+from . import imp_tools
 
 '''
 This script takes in an MRC file and a set of PDB structure_element files and

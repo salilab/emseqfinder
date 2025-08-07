@@ -8,8 +8,8 @@ from statsmodels.distributions.empirical_distribution import ECDF
 from statsmodels.distributions.empirical_distribution import StepFunction
 import argparse
 import os
-import config
-import tools
+from . import config
+from . import tools
 
 
 def compute_cdf(dmap, exclude_zero=True):
