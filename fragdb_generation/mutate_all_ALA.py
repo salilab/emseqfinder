@@ -9,7 +9,7 @@
 # For insertion and deletion mutants, follow the standard comparative
 # modeling procedure.
 
-from modeller import *
+from modeller import Model, Alignment, Selection, Environ
 import sys
 import os
 
@@ -21,24 +21,24 @@ def mutate_all_ALA(code):
     # Read the topology library with non-hydrogen atoms only:
     env.libs.topology.read(file='$(LIB)/top_heav.lib')
     # To produce a mutant with all hydrogens, uncomment this line:
-    #env.libs.topology.read(file='$(LIB)/top_allh.lib')
+    # env.libs.topology.read(file='$(LIB)/top_allh.lib')
 
     # Read the CHARMM parameter library:
     env.libs.parameters.read(file='$(LIB)/par.lib')
 
     # Read the original PDB file and copy its sequence to the alignment array:
-    #pdbpath = sys.argv[1]
+    # pdbpath = sys.argv[1]
     aln = Alignment(env)
     mdl = Model(env, file=code)
     mdl2 = Model(env, file=code)
     aln.append_model(mdl, atom_files=code, align_codes=code)
 
     # Select the residues to be mutated: in this case all ASP residues:
-    #sel = selection(mdl).only_residue_types('ASP')
+    # sel = selection(mdl).only_residue_types('ASP')
     sel = Selection(mdl)
 
     # The second example is commented out; it selects residues '1' and '10'.
-    #sel = selection(mdl.residues['1'], mdl.residues['10'])
+    # sel = selection(mdl.residues['1'], mdl.residues['10'])
 
     # Mutate the selected residues into HIS residues (neutral HIS):
     sel.mutate(residue_type='ALA')
@@ -66,6 +66,6 @@ def mutate_all_ALA(code):
 
 
 if __name__ == "__main__":
-    pdbpath  = sys.argv[1]
+    pdbpath = sys.argv[1]
     mutate_all_ALA(pdbpath)
     print("Done mutation from the main file")
