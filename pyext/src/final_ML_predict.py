@@ -66,7 +66,8 @@ print('Number of devices: {}'.format(strategy.num_replicas_in_sync))
 
 with strategy.scope():
     # Load checkpoint:
-    checkpoint_path = IMP.emseqfinder.get_data_path(
+    from . import get_data_path
+    checkpoint_path = get_data_path(
         "finalmodel_no_amino_weights/finalmodel.tfl")
 #    checkpoint_path = None
     test_mode = False
