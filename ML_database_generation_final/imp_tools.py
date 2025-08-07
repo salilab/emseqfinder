@@ -92,11 +92,9 @@ def mutate_residue(residue_particle, new_aa):
 
     # Use ff to add new residue atoms
     topology = ff.create_topology(rph)
-    topology.add_missing_atoms(rph)
-    topology.add_coordinates(rph)
-    topology = ff.create_topology(rph)
     topology.add_atom_types(rph)
     topology.add_missing_atoms(rph)
+    topology.add_coordinates(rph)
 
     bonds = topology.add_bonds(rph)
     ff.create_angles(bonds)
