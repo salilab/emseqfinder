@@ -1,4 +1,20 @@
-# emseqfinder
+\brief Assignment of sequence to backbone fragments traced in a cryo-EM map 
+
+# Info
+
+_Author(s)_: Dibyendu Mondal, Vipul Kumar
+
+_Maintainer_: `benmwebb`
+
+_License_: [LGPL](https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html)
+This library is free software; you can redistribute it and/or
+modify it under the terms of the GNU Lesser General Public
+License as published by the Free Software Foundation; either
+version 2 of the License, or (at your option) any later version.
+
+_Publications_:
+ - D. Mondal, V. Kumar, T. Satler, R. Ramachandran, D. Saltzberg, I. Chemmama, K.B. Pilla, I. Echeverria, B.M. Webb, M. Gupta, K.A. Verba, A. Sali. Recognizing amino acid sidechains in a medium resolution cryo-electron density map. Prot Sci 34, e70217, 2025.
+ - See [main IMP papers list](@ref publications).
 
 ## How to run the program to get sequence assignments
 ## 1. We need a database folder. example "test"
