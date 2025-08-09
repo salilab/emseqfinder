@@ -4,10 +4,8 @@ import pandas as pd
 import sys
 import os
 import time
-# use a path to find scripts such as "data_v2.py" and "cnn.py"
-# sys.path.append("path to folder with data_v2.py and cnn.py")
-from data_v2_for_parts import (reshape_df, split_image_and_other_features,
-                               ResidueVoxelDataset)
+from .data_v2_for_parts import (reshape_df, split_image_and_other_features,
+                                ResidueVoxelDataset)
 
 # Non-voxel columns in the input dataframe
 other_columns = ["EMDB", "resolution", "pdbname", "chain", "resid",

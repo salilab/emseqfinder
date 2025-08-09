@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-import tools
+from . import tools
 import sys
 import IMP
 import IMP.pmi
