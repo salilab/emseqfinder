@@ -160,7 +160,7 @@ def split_image_and_other_features(df, image_prefix="v",
     return image_features, other_features
 
 
-class ResidueVoxelDataset():
+class ResidueVoxelDataset:
     def __init__(self, infile, classes=residues, target=None,
                  voxel_dim=(14, 14, 14),
                  other_columns=[("EMDB", "object"),

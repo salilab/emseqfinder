@@ -29,22 +29,28 @@ def import_voxel_file_pickle(fname, other_columns, n_voxels):
     return database
 
 
-fname = sys.argv[1]
-if sys.argv[2]:
-    basename = sys.argv[2]
-else:
-    basename = os.path.basename(fname).split('.')[0]
+def main():
+    fname = sys.argv[1]
+    if sys.argv[2]:
+        basename = sys.argv[2]
+    else:
+        basename = os.path.basename(fname).split('.')[0]
 
-n_voxels = 2744
-# for parts fitting we are using this
-other_columns = [("EMDB", "s"), ("resolution", "f"), ("pdbname", "s"),
-                 ("chain", "s"), ("resid", "i"), ("resname", "s"), ("ss", "s")]
+    n_voxels = 2744
+    # for parts fitting we are using this
+    other_columns = [("EMDB", "s"), ("resolution", "f"), ("pdbname", "s"),
+                     ("chain", "s"), ("resid", "i"), ("resname", "s"),
+                     ("ss", "s")]
 
-# read_pickle
-start = time.time()
-f_name = basename + '.pkl'
-print(f_name)
-df = import_voxel_file_pickle(fname, other_columns, n_voxels)
-df.to_pickle(f_name)
-end = time.time()
-print('for pickle convert time', end-start)
+    # read_pickle
+    start = time.time()
+    f_name = basename + '.pkl'
+    print(f_name)
+    df = import_voxel_file_pickle(fname, other_columns, n_voxels)
+    df.to_pickle(f_name)
+    end = time.time()
+    print('for pickle convert time', end-start)
+
+
+if __name__ == '__main__':
+    main()
