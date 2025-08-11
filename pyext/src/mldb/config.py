@@ -1,12 +1,3 @@
-# path of our database folder
-
-#####################################
-# EM density extraction from parts
-#####################################
-# example is a test folder under which you have folders with name of emdb
-database_home = "path/of/the/emdatabase"
-
-
 # emdb_home is where you initially download the map, fasta file, pdb file,
 # and xml file, after creating a folder with folder name same as EMDBid
 emdb_home = "path"

@@ -28,7 +28,7 @@ The protocol is typically run using the `emseqfinder` command line tool:
 ## 5. Get the PDB file and run stride to get the secodnary structure annotations.
 ## 6. Then run ./fragdb_generation/get_fraglib_from_native.py script to generate the fragements. Copy all the fragments to emdbid/1structure_elements
 
-## 7. Edit the conifg.py file inside ./ML_database_generation_final with database_home as "test" and run ./ML_database_generation_final/parts_ML_database_generation.py script on testrun.txt
+## 7. Run ./ML_database_generation_final/parts_ML_database_generation.py script on testrun.txt
 ## 8. Please check configuration of a testrun.txt file in the ./ML_database_generation_final folder.
 ## 9. once the ML database is generated from the EMDB voxel and some other informations, go head to run the ML prediction script in this folder.
 ## 10. CNN prediction

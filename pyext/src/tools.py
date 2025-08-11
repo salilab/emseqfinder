@@ -41,9 +41,6 @@ s_residue_propensities = {
     'TYR': 0.045706695835612154, 'VAL': 0.13074263614344872}
 
 
-database_home = "/wynton/group/sali/saltzberg/database/em_residue_density/EMDB"
-
-
 def read_sequences(sequence_file):
     import IMP
     import IMP.pmi

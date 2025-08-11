@@ -157,18 +157,22 @@ parser.add_argument('emdb', metavar='emdb', type=str,
                     help='Provide an EMDB id')
 parser.add_argument('--thresh', metavar='thresh', type=str,
                     help='map threshold value')
+parser.add_argument(
+    "--database_home", dest="database_home", type=str,
+    help="Directory containing all data files used in the protocol",
+    default=".")
 
 args = parser.parse_args()
 curr_dir = os.getcwd()
 emdb = args.emdb
 
 # Filepaths
-em_map = os.path.join(config.database_home, str(emdb), "0system", "emdb.map")
-norm_em_map = os.path.join(config.database_home, str(emdb), "0system",
+em_map = os.path.join(args.database_home, str(emdb), "0system", "emdb.map")
+norm_em_map = os.path.join(args.database_home, str(emdb), "0system",
                            "emdb_normalized_new.map")
-pdb_file = os.path.join(config.database_home, str(emdb), "0system",
+pdb_file = os.path.join(args.database_home, str(emdb), "0system",
                         "native.pdb")
-data_file = os.path.join(config.database_home, str(emdb), "0system",
+data_file = os.path.join(args.database_home, str(emdb), "0system",
                          "normalization_new.dat")
 
 # If there's no EM map, then there's nothing to do!

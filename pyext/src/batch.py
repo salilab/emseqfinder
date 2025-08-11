@@ -10,7 +10,7 @@ from IMP.emseqfinder.calculate_seq_match_batch import calculate_seq_match
 __doc__ = "Perform all steps of the emseqfinder protocol."
 
 
-def process_pdb(pdbfile, resolution, final_output_file):
+def process_pdb(pdbfile, resolution, database_home, final_output_file):
     base = pathlib.Path(pdbfile.stem)
     mapfile = pathlib.Path('cryoem_maps') / base.with_suffix('.map')
     fastafile = pathlib.Path('fasta_files') / base.with_suffix('.fasta')
@@ -65,7 +65,8 @@ def process_pdb(pdbfile, resolution, final_output_file):
     p = subprocess.run(
         [sys.executable, '-m',
          'IMP.emseqfinder.mldb.normalize_map_for_parts_fitting', base,
-         '--thresh', str(threshold)])
+         '--thresh', str(threshold),
+         '--database_home', database_home])
     if p.returncode != 0:
         print(f"[ERROR] Normalization failed. Skipping {base}.")
         return
@@ -79,6 +80,7 @@ def process_pdb(pdbfile, resolution, final_output_file):
     p = subprocess.run(
         [sys.executable, '-m',
          'IMP.emseqfinder.mldb.get_database_for_one_emdb_using_parts', base,
+         '--database_home', database_home,
          f"{base}_ML_side.dat", str(resolution)])
     if p.returncode != 0:
         print(f"[ERROR] ML DB generation failed. Skipping {base}.")
@@ -125,6 +127,10 @@ def parse_args():
     parser.add_argument(
         "--db-resolution", dest="resolution", type=float,
         help="Resolution used for database generation", default=4.0)
+    parser.add_argument(
+        "--database_home", dest="database_home", type=str,
+        help="Directory containing all data files used in the protocol",
+        default=".")
 
     return parser.parse_args()
 
@@ -136,7 +142,8 @@ def main():
     final_output_file = pathlib.Path("batch_matching_results.txt")
 
     for pdbfile in pathlib.Path("pdb_files").glob("*.pdb"):
-        process_pdb(pdbfile, args.resolution, final_output_file)
+        process_pdb(pdbfile, args.resolution, args.database_home,
+                    final_output_file)
 
 
 if __name__ == '__main__':

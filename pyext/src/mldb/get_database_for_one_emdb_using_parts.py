@@ -1,6 +1,7 @@
 import sys
 import glob
 import os
+import argparse
 import IMP
 import IMP.em
 import IMP.core
@@ -15,16 +16,31 @@ extracts the density values around the residue as defined in config.py
 
 IMP.set_log_level(IMP.SILENT)
 
+parser = argparse.ArgumentParser(
+    description='Given an MRC file and set of PDB structure_element files, '
+                'extracts the density values around the residue')
+parser.add_argument(
+    "--database_home", dest="database_home", type=str,
+    help="Directory containing all data files used in the protocol",
+    default=".")
+parser.add_argument('emdb', type=str, help='EMDB id')
+parser.add_argument('database_file', type=str,
+                    help='Name of the database file to write')
+parser.add_argument('resolution', type=float,
+                    help='Resolution of the map')
+
+args = parser.parse_args()
+
 # EMDBID
-emdb = sys.argv[1]
+emdb = args.emdb
 
 # name of the database file to write
-database_file = sys.argv[2]
+database_file = args.database_file
 
 # Name of the EM map and pdb to use (in 0system)
-map_file = os.path.join(config.database_home, emdb, "0system",
+map_file = os.path.join(args.database_home, emdb, "0system",
                         "emdb_normalized_new.map")
-emdb_path = os.path.join(config.database_home, emdb)
+emdb_path = os.path.join(args.database_home, emdb)
 # Get all SE pdb files
 pdbs = glob.glob(emdb_path+"/1structure_elements/*.pdb")
 print(pdbs)
@@ -36,7 +52,7 @@ try:
     resolution = tools.get_resolution_from_xml(xml)
 except:  # noqa: E722
     # resolution of the map
-    resolution = float(sys.argv[3])
+    resolution = args.resolution
 
 # Read the reference pdb
 m = IMP.Model()
