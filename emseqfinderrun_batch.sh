@@ -36,7 +36,7 @@ for pdbfile in pdb_files/*.pdb; do
     echo "[INFO] Processing $base"
 
     # Compute dynamic threshold
-    threshold=$(python3 compute_dynamic_threshold.py "$mapfile")
+    threshold=$(python3 -m IMP.emseqfinder.compute_dynamic_threshold "$mapfile")
     if [[ -z "$threshold" ]]; then
         echo "[WARNING] Failed to compute threshold for $base. Skipping..."
         continue
@@ -61,7 +61,7 @@ for pdbfile in pdb_files/*.pdb; do
     frag_dir="fragments_${base}"
     rm -rf "$frag_dir"
     mkdir -p "$frag_dir"
-    python fragdb_generation/get_fraglib_from_native.py \
+    python3 -m IMP.emseqfinder.fragdb.get_fraglib_from_native \
         "$pdbfile" "$stride_file" "$frag_dir"
     if [[ $? -ne 0 ]]; then
         echo "[ERROR] Fragment generation failed. Skipping $base."
@@ -75,7 +75,7 @@ for pdbfile in pdb_files/*.pdb; do
     cp "$frag_dir"/*.pdb "$base/1structure_elements/"
 
     # Normalize map
-    python3 ML_database_generation_final/normalize_map_for_parts_fitting.py \
+    python3 -m IMP.emseqfinder.mldb.normalize_map_for_parts_fitting \
         "$base" --thresh "$threshold"
     if [[ $? -ne 0 ]]; then
         echo "[ERROR] Normalization failed. Skipping $base."
@@ -86,7 +86,7 @@ for pdbfile in pdb_files/*.pdb; do
     rm -f "${base}_ML_side.dat" "${base}_ML_side.pkl" "${base}_ML_side_ML_prob.dat" "${base}_ML_output.txt"
 
     # Create database
-    python3 ML_database_generation_final/get_database_for_one_emdb_using_parts.py \
+    python3 -m IMP.emseqfinder.mldb.get_database_for_one_emdb_using_parts \
         "$base" "${base}_ML_side.dat" "$resolution"
     if [[ $? -ne 0 ]]; then
         echo "[ERROR] ML DB generation failed. Skipping $base."
@@ -94,7 +94,7 @@ for pdbfile in pdb_files/*.pdb; do
     fi
 
     # Convert to pickle
-    python3 convert_MLDB_topkl.py \
+    python3 -m IMP.emseqfinder.convert_MLDB_topkl \
         "${base}_ML_side.dat" "${base}_ML_side"
     if [[ $? -ne 0 ]]; then
         echo "[ERROR] PKL conversion failed. Skipping $base."
@@ -102,7 +102,7 @@ for pdbfile in pdb_files/*.pdb; do
     fi
 
     # Prediction
-    python3 final_ML_predict.py \
+    python3 -m IMP.emseqfinder.final_ML_predict \
         "${base}_ML_side.pkl" 10000
     if [[ $? -ne 0 ]]; then
         echo "[ERROR] Prediction failed. Skipping $base."
@@ -110,7 +110,7 @@ for pdbfile in pdb_files/*.pdb; do
     fi
 
     # Evaluate prediction
-    python evaluate_output_database.py \
+    python3 -m IMP.emseqfinder.evaluate_output_database \
         "${base}_ML_side_ML_prob.dat" "${base}_ML_output.txt"
     if [[ $? -ne 0 ]]; then
         echo "[ERROR] Evaluation failed. Skipping $base."
@@ -118,7 +118,7 @@ for pdbfile in pdb_files/*.pdb; do
     fi
 
     # Calculate and append sequence match
-    python calculate_seq_match_batch.py \
+    python3 -m IMP.emseqfinder.calculate_seq_match_batch \
         "${base}_ML_output.txt" >> "$final_output_file"
     if [[ $? -ne 0 ]]; then
         echo "[ERROR] Match calculation failed. Skipping $base."
