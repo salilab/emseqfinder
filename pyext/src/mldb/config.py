@@ -1,5 +1,3 @@
-stride_exec = "/usr/bin/stride"
-
 # path of our database folder
 
 #####################################
@@ -13,21 +11,11 @@ database_home = "path/of/the/emdatabase"
 # and xml file, after creating a folder with folder name same as EMDBid
 emdb_home = "path"
 
-
-# path for sse extraction script
-build_se_script = "get_structure_elements.py"
-
-
 # reference map for voxel data extraction
-
 refpdb = "./reference/ref.pdb"
 reference_map = "./reference/ref.mrc"
 res_bounding_points = [(-4, -10, -10), (10, 4, 4)]
 ref_voxel_size = 1.0
-
-all_resis = ["GLY", "ALA", "THR", "HIS", "SER", "ASP", "ASN", "GLU", "GLN",
-             "VAL", "LEU", "ILE", "LYS", "ARG", "TRP", "TYR", "PHE", "CYS",
-             "MET", "PRO"]
 
 
 def get_xml(emdb):
