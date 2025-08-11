@@ -2,10 +2,7 @@ import sys
 import os
 
 
-def main():
-    # Define a global output file where all results will be stored
-    final_output_file = "seq_matching_results.txt"
-
+def calculate_seq_match(result_files, final_output_file):
     # Ensure output file exists and write headers only once
     if not os.path.exists(final_output_file):
         with open(final_output_file, "w") as outfile:
@@ -13,8 +10,8 @@ def main():
             outfile.write("Result_File\tTotal_Percentage_Matched\t"
                           "Total_Abs_Percentage_Matched\n")
 
-    # Process each input file given in command-line arguments
-    for result_file in sys.argv[1:]:
+    # Process each input file
+    for result_file in result_files:
         total_residue = 0
         total_residue_matched = 0
         total_residue_matched_abs = 0
@@ -95,4 +92,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    calculate_seq_match(sys.argv[1:], "seq_matching_results.txt")

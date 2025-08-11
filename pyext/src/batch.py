@@ -4,12 +4,13 @@ import pathlib
 import sys
 from IMP import ArgumentParser
 from IMP.emseqfinder.compute_dynamic_threshold import compute_threshold
+from IMP.emseqfinder.calculate_seq_match_batch import calculate_seq_match
 
 
 __doc__ = "Perform all steps of the emseqfinder protocol."
 
 
-def process_pdb(pdbfile):
+def process_pdb(pdbfile, resolution, final_output_file):
     base = pathlib.Path(pdbfile.stem)
     mapfile = pathlib.Path('cryoem_maps') / base.with_suffix('.map')
     fastafile = pathlib.Path('fasta_files') / base.with_suffix('.fasta')
@@ -69,31 +70,73 @@ def process_pdb(pdbfile):
         print(f"[ERROR] Normalization failed. Skipping {base}.")
         return
 
+    # Remove old database files if exist
+    for p in (f"{base}_ML_side.dat", f"{base}_ML_side.pkl",
+              f"{base}_ML_side_ML_prob.dat", f"{base}_ML_output.txt"):
+        pathlib.Path(p).unlink(missing_ok=True)
+
+    # Create database
+    p = subprocess.run(
+        [sys.executable, '-m',
+         'IMP.emseqfinder.mldb.get_database_for_one_emdb_using_parts', base,
+         f"{base}_ML_side.dat", str(resolution)])
+    if p.returncode != 0:
+        print(f"[ERROR] ML DB generation failed. Skipping {base}.")
+        return
+
+    # Convert to pickle
+    p = subprocess.run(
+        [sys.executable, '-m', 'IMP.emseqfinder.convert_MLDB_topkl',
+         f"{base}_ML_side.dat", f"{base}_ML_side"])
+    if p.returncode != 0:
+        print(f"[ERROR] PKL conversion failed. Skipping {base}.")
+        return
+
+    # Prediction
+    p = subprocess.run(
+        [sys.executable, '-m', 'IMP.emseqfinder.final_ML_predict',
+         f"{base}_ML_side.pkl", '10000'])
+    if p.returncode != 0:
+        print(f"[ERROR] Prediction failed. Skipping {base}.")
+        return
+
+    # Evaluate prediction
+    p = subprocess.run(
+        [sys.executable, '-m', 'IMP.emseqfinder.evaluate_output_database',
+         f"{base}_ML_side_ML_prob.dat", f"{base}_ML_output.txt"])
+    if p.returncode != 0:
+        print(f"[ERROR] Evaluation failed. Skipping {base}.")
+        return
+
+    # Calculate and append sequence match
+    calculate_seq_match([f"{base}_ML_output.txt"], final_output_file)
+
+    # Cleanup
+    shutil.rmtree(frag_dir, ignore_errors=True)
+
+    print(f"[INFO] Finished processing {base} ✅")
+    print("===============================================")
+    print("")
+
 
 def parse_args():
     parser = ArgumentParser(
         description="Perform all steps of the emseqfinder protocol")
+    parser.add_argument(
+        "--db-resolution", dest="resolution", type=float,
+        help="Resolution used for database generation", default=4.0)
+
     return parser.parse_args()
 
 
 def main():
     args = parse_args()
 
-    # Resolution used for database generation
-    resolution = 4
-
     # Output file for overall results
     final_output_file = pathlib.Path("batch_matching_results.txt")
 
-    # Add header if file doesn’t exist
-    if not final_output_file.exists():
-        with open(final_output_file, 'w') as fh:
-            print("Result_File Total_Percentage_Matched "
-                  "Total_Abs_Percentage_Matched", file=fh)
-
-    # Loop through all PDB files
     for pdbfile in pathlib.Path("pdb_files").glob("*.pdb"):
-        process_pdb(pdbfile)
+        process_pdb(pdbfile, args.resolution, final_output_file)
 
 
 if __name__ == '__main__':
