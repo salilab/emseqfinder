@@ -1,11 +1,9 @@
 import sys
 
 
-def main():
+def compute_threshold(map_path):
     import mrcfile
     import numpy as np
-    map_path = sys.argv[1]
-
     with mrcfile.open(map_path, permissive=True) as mrc:
         data = mrc.data.astype(np.float32)
 
@@ -17,9 +15,12 @@ def main():
                     & (data < np.percentile(data, 99))]
 
         # Use a percentile-based threshold close to Chimera's visual level
-        threshold = np.percentile(data, 99.9)
+        return np.percentile(data, 99.9)
 
-        print(round(threshold, 4))
+
+def main():
+    threshold = compute_threshold(sys.argv[1])
+    print(round(threshold, 4))
 
 
 if __name__ == '__main__':

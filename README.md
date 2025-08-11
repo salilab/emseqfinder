@@ -16,6 +16,10 @@ _Publications_:
  - D. Mondal, V. Kumar, T. Satler, R. Ramachandran, D. Saltzberg, I. Chemmama, K.B. Pilla, I. Echeverria, B.M. Webb, M. Gupta, K.A. Verba, A. Sali. Recognizing amino acid sidechains in a medium resolution cryo-electron density map. Prot Sci 34, e70217, 2025.
  - See [main IMP papers list](@ref publications).
 
+# emseqfinder: command line tool to run emseqfinder protocol {#emseqfinder}
+
+The protocol is typically run using the `emseqfinder` command line tool:
+
 ## How to run the program to get sequence assignments
 ## 1. We need a database folder. example "test"
 ## 2. create and folder with anything like "emdbid"
