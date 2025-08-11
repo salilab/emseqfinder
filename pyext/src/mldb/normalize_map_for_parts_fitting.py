@@ -121,7 +121,7 @@ def histogram_match_map(ref, exp, em_map, df=None):
     refcdf = compute_cdf(ref)  # compute the CDF for the ref map
 
     if df is not None:
-        of = open(os.path.dirname(em_map)+"hmatch.dat", "w")
+        of = open(os.path.join(os.path.dirname(em_map), "hmatch.dat"), "w")
     for i in range(exp.get_number_of_voxels()):
         expval = exp.get_value(i)
         # get how frequent that pixel value (expval) occurs in
