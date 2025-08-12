@@ -71,7 +71,7 @@ def main():
         # Load checkpoint:
         from . import get_data_path
         checkpoint_path = get_data_path(
-            "finalmodel_no_amino_weights/finalmodel.tfl")
+            "finalmodel_no_amino_weights/finalmodel.h5")
     #    checkpoint_path = None
         test_mode = False
         evaluate_mode = True
