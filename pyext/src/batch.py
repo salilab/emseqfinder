@@ -104,7 +104,7 @@ def process_pdb(pdbfile, resolution, database_home, reference_map,
 
     # Prediction
     p = subprocess.run(
-        [sys.executable, '-m', 'IMP.emseqfinder.final_ML_predict',
+        [sys.executable, '-m', 'IMP.emseqfinder.predict',
          f"{base}_ML_side.pkl", '10000'])
     if p.returncode != 0:
         print(f"[ERROR] Prediction failed. Skipping {base}.")

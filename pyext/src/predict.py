@@ -1,11 +1,9 @@
-from tensorflow import keras
-import tensorflow as tf
-import pandas as pd
 import sys
 import os
 import time
-from .data_v2_for_parts import (reshape_df, split_image_and_other_features,
-                                ResidueVoxelDataset)
+from IMP import ArgumentParser
+
+__doc__ = "Run ML prediction given an input pickle."
 
 # Non-voxel columns in the input dataframe
 other_columns = ["EMDB", "resolution", "pdbname", "chain", "resid",
@@ -30,6 +28,7 @@ def send_chunk(df, counter, chunk_size=20000):
 
 
 def get_correct_probs(df, probs):
+    import pandas as pd
     prob_list = []
     resnames = ["p_"+res for res in df["resname"].values]
     i = 0
@@ -40,7 +39,13 @@ def get_correct_probs(df, probs):
     return pd.Series(prob_list)
 
 
-def main():
+def predict(pickle_file, chunk_size):
+    from tensorflow import keras
+    import tensorflow as tf
+    import pandas as pd
+    from .data_v2_for_parts import (reshape_df, split_image_and_other_features,
+                                    ResidueVoxelDataset)
+
     # Set dynamic memory growth
     gpus = tf.config.experimental.list_physical_devices('GPU')
     for gpu in gpus:
@@ -49,7 +54,7 @@ def main():
     t0 = time.time()
     ###############################
     # Import input data
-    spl_input_file = sys.argv[1]
+    spl_input_file = pickle_file
     print("Begin", flush=True)
     indat = ResidueVoxelDataset(
         spl_input_file, target="resname", train_features=["resolution"])
@@ -93,7 +98,6 @@ def main():
             model = keras.models.load_model(checkpoint_path)
             model.summary()
             data_set_size = indat.data_df.shape[0]
-            chunk_size = int(sys.argv[2])
             df_preds = []
             for row_num in range(0, data_set_size, chunk_size):
                 print(indat.data_df["H"].head(5))
@@ -117,7 +121,7 @@ def main():
     print("OC columns", len(df_oc.columns), len(data_feats))
 
     # Use the same prefix as the input .pkl
-    base_name = os.path.splitext(sys.argv[1])[0]  # e.g., "3j5r_ML_side"
+    base_name = os.path.splitext(pickle_file)[0]  # e.g., "3j5r_ML_side"
     output_file = f"{base_name}_ML_prob.dat"
     df_oc.loc[:, ("c_prob",)] = get_correct_probs(indat.data_df, df_pred)
     # df_oc["vavg"] = np.average(Ximageall, axis=1)
@@ -126,6 +130,20 @@ def main():
     df_pred.reset_index(drop=True, inplace=True)
     df_out = pd.concat([df_oc, df_pred], axis=1)
     df_out.to_csv(output_file, sep=" ", index=False)
+
+
+def parse_args():
+    parser = ArgumentParser(
+        description="Run ML prediction given an input pickle")
+    parser.add_argument("pickle_file", help="Input Python pickle file")
+    parser.add_argument("chunk_size", type=int,
+                        help="Chunk size for image splitting")
+    return parser.parse_args()
+
+
+def main():
+    args = parse_args()
+    predict(args.pickle_file, args.chunk_size)
 
 
 if __name__ == '__main__':
