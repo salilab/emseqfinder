@@ -119,7 +119,7 @@ def main():
     # Use the same prefix as the input .pkl
     base_name = os.path.splitext(sys.argv[1])[0]  # e.g., "3j5r_ML_side"
     output_file = f"{base_name}_ML_prob.dat"
-    df_oc["c_prob"] = get_correct_probs(indat.data_df, df_pred)
+    df_oc.loc[:, ("c_prob",)] = get_correct_probs(indat.data_df, df_pred)
     # df_oc["vavg"] = np.average(Ximageall, axis=1)
     # df_oc["vstd"] = np.std(Ximageall, axis=1)
     df_oc.reset_index(drop=True, inplace=True)
