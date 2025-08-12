@@ -9,6 +9,7 @@ from . import config
 ff = IMP.atom.CHARMMParameters(IMP.atom.get_data_path("top_heav.lib"),
                                IMP.atom.get_data_path("par.lib"))
 
+
 def get_backbone_particles(pdb):
     m = IMP.Model()
     rh = IMP.atom.read_pdb(pdb, m, IMP.atom.BackbonePDBSelector())
