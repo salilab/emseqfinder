@@ -161,6 +161,10 @@ parser.add_argument(
     "--database_home", dest="database_home", type=str,
     help="Directory containing all data files used in the protocol",
     default=".")
+parser.add_argument(
+    "--reference_map", dest="reference_map", type=str,
+    help="reference map for voxel data extraction",
+    default="reference/ref.mrc")
 
 args = parser.parse_args()
 curr_dir = os.getcwd()
@@ -184,7 +188,7 @@ df = open(data_file, "w")
 df.write("voxel exp_val exp_cdf ref_val ref_cdf")
 
 dmap = IMP.em.read_map(em_map, IMP.em.MRCReaderWriter())
-ref_dmap = IMP.em.read_map(config.reference_map, IMP.em.MRCReaderWriter())
+ref_dmap = IMP.em.read_map(args.reference_map, IMP.em.MRCReaderWriter())
 
 # Get the coordinates of the PDB Calpha atoms
 m = IMP.Model()

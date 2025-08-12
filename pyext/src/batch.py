@@ -1,7 +1,12 @@
 import subprocess
 import shutil
+import contextlib
 import pathlib
+import tempfile
+import gzip
+import os
 import sys
+from . import get_data_path
 from IMP import ArgumentParser
 from IMP.emseqfinder.compute_dynamic_threshold import compute_threshold
 from IMP.emseqfinder.calculate_seq_match_batch import calculate_seq_match
@@ -10,7 +15,8 @@ from IMP.emseqfinder.calculate_seq_match_batch import calculate_seq_match
 __doc__ = "Perform all steps of the emseqfinder protocol."
 
 
-def process_pdb(pdbfile, resolution, database_home, final_output_file):
+def process_pdb(pdbfile, resolution, database_home, reference_map,
+                final_output_file):
     base = pathlib.Path(pdbfile.stem)
     mapfile = pathlib.Path('cryoem_maps') / base.with_suffix('.map')
     fastafile = pathlib.Path('fasta_files') / base.with_suffix('.fasta')
@@ -66,7 +72,8 @@ def process_pdb(pdbfile, resolution, database_home, final_output_file):
         [sys.executable, '-m',
          'IMP.emseqfinder.mldb.normalize_map_for_parts_fitting', base,
          '--thresh', str(threshold),
-         '--database_home', database_home])
+         '--database_home', database_home,
+         '--reference_map', reference_map])
     if p.returncode != 0:
         print(f"[ERROR] Normalization failed. Skipping {base}.")
         return
@@ -131,8 +138,27 @@ def parse_args():
         "--database_home", dest="database_home", type=str,
         help="Directory containing all data files used in the protocol",
         default=".")
+    parser.add_argument(
+        "--reference_map", dest="reference_map", type=str,
+        help="reference map for voxel data extraction",
+        default=get_data_path('reference/ref.mrc.gz'))
 
     return parser.parse_args()
+
+
+@contextlib.contextmanager
+def get_reference_map(args):
+    if args.reference_map.endswith('.gz'):
+        # IMP's mrc reader cannot read compressed files, so decompress
+        # to a temporary location and return that instead
+        with tempfile.TemporaryDirectory() as tmpdir:
+            tmpfile = os.path.join(tmpdir, 'ref.mrc')
+            with gzip.open(args.reference_map, 'rb') as fh_in:
+                with open(tmpfile, 'wb') as fh_out:
+                    shutil.copyfileobj(fh_in, fh_out)
+            yield tmpfile
+    else:
+        yield args.reference_map
 
 
 def main():
@@ -141,9 +167,10 @@ def main():
     # Output file for overall results
     final_output_file = pathlib.Path("batch_matching_results.txt")
 
-    for pdbfile in pathlib.Path("pdb_files").glob("*.pdb"):
-        process_pdb(pdbfile, args.resolution, args.database_home,
-                    final_output_file)
+    with get_reference_map(args) as reference_map:
+        for pdbfile in pathlib.Path("pdb_files").glob("*.pdb"):
+            process_pdb(pdbfile, args.resolution, args.database_home,
+                        reference_map, final_output_file)
 
 
 if __name__ == '__main__':
