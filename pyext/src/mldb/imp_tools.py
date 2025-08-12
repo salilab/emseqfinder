@@ -6,24 +6,8 @@ import IMP.pmi.topology
 import numpy
 from . import config
 
-alpha = IMP.pmi.alphabets.amino_acid
 ff = IMP.atom.CHARMMParameters(IMP.atom.get_data_path("top_heav.lib"),
                                IMP.atom.get_data_path("par.lib"))
-
-m = IMP.Model()
-rh = IMP.atom.read_pdb(config.refpdb, m)
-res = IMP.atom.Residue(IMP.atom.get_by_type(rh, IMP.atom.RESIDUE_TYPE)[0])
-CA_ref_coord = IMP.core.XYZ(
-    IMP.atom.get_atom(res, IMP.atom.AT_CA)).get_coordinates()
-N_ref_coord = IMP.core.XYZ(
-    IMP.atom.get_atom(res, IMP.atom.AT_N)).get_coordinates()
-C_ref_coord = IMP.core.XYZ(
-    IMP.atom.get_atom(res, IMP.atom.AT_C)).get_coordinates()
-O_ref_coord = IMP.core.XYZ(
-    IMP.atom.get_atom(res, IMP.atom.AT_O)).get_coordinates()
-CB_ref_coord = IMP.core.XYZ(
-    IMP.atom.get_atom(res, IMP.atom.AT_CB)).get_coordinates()
-
 
 def get_backbone_particles(pdb):
     m = IMP.Model()
@@ -223,6 +207,7 @@ def get_pdb_offset(pdb, sequences):
     # Find the sequence offset between the pdb file and fasta file
     # The fasta file is always the reference
 
+    alpha = IMP.pmi.alphabets.amino_acid
     # Make an IMP hierarchy and compare that sequence to the fasta
     m = IMP.Model()
     root_hier = IMP.atom.read_pdb(pdb, m, IMP.atom.ATOMPDBSelector())
@@ -258,6 +243,7 @@ def string_to_dict(string, start=1):
 
 
 def dict_to_string(seqdict):
+    alpha = IMP.pmi.alphabets.amino_acid
     lastres = max(seqdict.keys())
     seq = ""
     for i in range(lastres):

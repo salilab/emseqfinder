@@ -3,7 +3,6 @@
 emdb_home = "path"
 
 # reference map for voxel data extraction
-refpdb = "./reference/ref.pdb"
 res_bounding_points = [(-4, -10, -10), (10, 4, 4)]
 ref_voxel_size = 1.0
 

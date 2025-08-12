@@ -22,6 +22,9 @@ parser.add_argument(
     "--database_home", dest="database_home", type=str,
     help="Directory containing all data files used in the protocol",
     default=".")
+parser.add_argument(
+    "--reference_pdb", dest="refpdb", type=str,
+    help="Reference PDB", default="reference/ref.pdb")
 parser.add_argument('emdb', type=str, help='EMDB id')
 parser.add_argument('database_file', type=str,
                     help='Name of the database file to write')
@@ -55,7 +58,7 @@ except:  # noqa: E722
 
 # Read the reference pdb
 m = IMP.Model()
-ref_mh = IMP.atom.read_pdb(config.refpdb, m)
+ref_mh = IMP.atom.read_pdb(args.refpdb, m)
 
 resis = IMP.atom.get_by_type(ref_mh, IMP.atom.RESIDUE_TYPE)
 refr = IMP.atom.Residue(resis[0])

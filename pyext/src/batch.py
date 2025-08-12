@@ -16,7 +16,7 @@ __doc__ = "Perform all steps of the emseqfinder protocol."
 
 
 def process_pdb(pdbfile, resolution, database_home, reference_map,
-                final_output_file):
+                reference_pdb, final_output_file):
     base = pathlib.Path(pdbfile.stem)
     mapfile = pathlib.Path('cryoem_maps') / base.with_suffix('.map')
     fastafile = pathlib.Path('fasta_files') / base.with_suffix('.fasta')
@@ -88,6 +88,7 @@ def process_pdb(pdbfile, resolution, database_home, reference_map,
         [sys.executable, '-m',
          'IMP.emseqfinder.mldb.get_database_for_one_emdb_using_parts', base,
          '--database_home', database_home,
+         '--reference_pdb', reference_pdb,
          f"{base}_ML_side.dat", str(resolution)])
     if p.returncode != 0:
         print(f"[ERROR] ML DB generation failed. Skipping {base}.")
@@ -142,6 +143,9 @@ def parse_args():
         "--reference_map", dest="reference_map", type=str,
         help="reference map for voxel data extraction",
         default=get_data_path('reference/ref.mrc.gz'))
+    parser.add_argument(
+        "--reference_pdb", type=str, help="Reference PDB",
+        default=get_data_path('reference/ref.pdb'))
 
     return parser.parse_args()
 
@@ -170,7 +174,7 @@ def main():
     with get_reference_map(args) as reference_map:
         for pdbfile in pathlib.Path("pdb_files").glob("*.pdb"):
             process_pdb(pdbfile, args.resolution, args.database_home,
-                        reference_map, final_output_file)
+                        reference_map, args.reference_pdb, final_output_file)
 
 
 if __name__ == '__main__':
