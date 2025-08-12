@@ -46,7 +46,7 @@ def main():
 
     # 1 - open scoring function database
     dtypes = {'EMDB': 'object'}
-    dfs = pd.read_csv(dbh_file, delim_whitespace=True, dtype=dtypes)
+    dfs = pd.read_csv(dbh_file, sep=r'\s+', dtype=dtypes)
     dfs.resid = dfs.resid.astype(int)
     # 2 - Get list of EMDBs
     emdbs = tools.get_emdbs(dfs)
