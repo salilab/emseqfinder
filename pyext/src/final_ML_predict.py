@@ -92,9 +92,9 @@ def main():
             print("Loading Model .....")
             model = keras.models.load_model(checkpoint_path)
             model.summary()
-            df_pred = pd.DataFrame(columns=pred_classes)
             data_set_size = indat.data_df.shape[0]
             chunk_size = int(sys.argv[2])
+            df_preds = []
             for row_num in range(0, data_set_size, chunk_size):
                 print(indat.data_df["H"].head(5))
                 print(indat.data_df["S"].head(5))
@@ -103,14 +103,9 @@ def main():
                     other_columns=["resolution", "H", "S"])
                 Xinall = reshape_df(Ximageall, (14, 14, 14))
                 probsall = model.predict([Xinall, Ximageother])
-                df_pred_temp = pd.DataFrame(data=probsall,
-                                            columns=pred_classes)
-                print("shape of the chunk of the current prediction "
-                      "database is: ", df_pred_temp.shape)
-                df_pred = df_pred.append(df_pred_temp)
-                print("shape of the current prediction database is: ",
-                      df_pred.shape)
-
+                df_preds.append(pd.DataFrame(data=probsall,
+                                             columns=pred_classes))
+            df_pred = pd.concat(df_preds)
         else:
             print("No model to load, please train your model first")
             sys.exit()
