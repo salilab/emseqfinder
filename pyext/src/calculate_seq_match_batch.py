@@ -1,3 +1,7 @@
+"""@namespace IMP.emseqfinder.calculate_seq_match_batch
+   Determine percentage sequence overlap for multiple results files."""
+
+
 import sys
 import os
 

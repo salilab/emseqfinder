@@ -1,3 +1,7 @@
+"""@namespace IMP.emseqfinder.compute_dynamic_threshold
+   Determine a threshold for an EM map."""
+
+
 import sys
 
 
