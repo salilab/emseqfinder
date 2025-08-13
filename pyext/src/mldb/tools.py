@@ -47,7 +47,7 @@ def is_length_correct_for_parts(pdb):
 
 
 def get_adjacent_values(em, voxel):
-    # reutrns a list of the value of all voxels
+    # returns a list of the value of all voxels
     # plus one
     import IMP.algebra
     loc = em.get_location_by_voxel(voxel)

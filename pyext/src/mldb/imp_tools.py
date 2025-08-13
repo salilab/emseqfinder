@@ -114,7 +114,7 @@ def parse_configuration(config_file):
 
 
 def get_psipred_dictionary_from_files(files):
-    # Given a set of files .ss2 with name somthing.A.something
+    # Given a set of files .ss2 with name something.A.something
     # where A is the chain name
     # Open each up and return a dictionary with key chain_id and
     # a subdictionary of residue numbers and HEC tuples
