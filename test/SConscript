@@ -1,2 +1,0 @@
-SConscript('backend/SConscript')
-SConscript('frontend/SConscript')
